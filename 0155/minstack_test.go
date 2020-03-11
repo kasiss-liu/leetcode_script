@@ -56,17 +56,17 @@ func TestMinStack(t *testing.T) {
 	minStack.Push(-5)
 
 	if minStack.Top() != -5 {
-		t.Log("Top() get wrong Value", minStack.Top())
+		t.Error("Top() get wrong Value", minStack.Top())
 	}
 
 	if minStack.GetMin() != -5 {
-		t.Log("GetMin() get wrong Value", minStack.GetMin())
+		t.Error("GetMin() get wrong Value", minStack.GetMin())
 	}
 
 	minStack.Pop()
 
 	if minStack.GetMin() != -1 {
-		t.Log("GetMin() get wrong Value")
+		t.Error("GetMin() get wrong Value")
 	}
 
 }
