@@ -5,7 +5,7 @@ import "testing"
 func game(guess []int, answer []int) int {
 	n := 0
 	if len(guess) == len(answer) {
-		for i := 0; i < len(guess)-1; i++ {
+		for i := 0; i < len(guess); i++ {
 			if guess[i] == answer[i] {
 				n++
 			}
