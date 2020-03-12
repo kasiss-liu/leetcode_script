@@ -1,39 +1,117 @@
-// 难点在于复杂度 没有解出来啊
+// leetcode 网友二分正解
 package main
 
 import (
 	"testing"
 )
 
-func findMedianSortedArrays (nums1 []int, nums2 []int) float64 {
+func lessThan(nums []int, val int) int {
+	if len(nums) == 0 {
+		return 0
+	}
+	from := 0
+	to := len(nums) - 1
+	for {
+		if from == to {
+			break
+		}
+		midIdx2 := (from + to) / 2
+		if nums[midIdx2] < val {
+			from = midIdx2 + 1
+		} else {
+			to = midIdx2
+		}
+	}
+	if nums[from] < val {
+		return from + 1
+	}
+	return from
+}
 
-	nums := append(nums1,nums2...)
-	total := len(nums)
+type context struct {
+	Idx1    int
+	Idx2    int
+	Num1    int
+	Num2    int
+	HasNum1 bool
+	HasNum2 bool
+}
 
-	for i:= 0; i < total; i ++ {
-		for j := i; j < total; j++ {
-			if nums[i] > nums[j] {
-				nums[i],nums[j] = nums[j],nums[i]
+// from表示，从合并数组的什么索引位置开始保存nums1和nums2的合并结果，因为不需要真的合并，所以只需要一个偏移量
+func combine(nums1 []int, nums2 []int, from int, ctx *context) {
+	nums1len := len(nums1)
+	nums2len := len(nums2)
+	if nums1len > nums2len {
+		nums1, nums2 = nums2, nums1
+		nums1len, nums2len = nums2len, nums1len
+	}
+
+	if nums1len == 0 {
+		if nums2len > 0 {
+			if from <= ctx.Idx1 && from+nums2len > ctx.Idx1 {
+				ctx.Num1 = nums2[ctx.Idx1-from]
+				ctx.HasNum1 = true
+			}
+			if from <= ctx.Idx2 && from+nums2len > ctx.Idx2 {
+				ctx.Num2 = nums2[ctx.Idx2-from]
+				ctx.HasNum2 = true
+			}
+		}
+		return
+	}
+
+	mid := (nums1len - 1) / 2
+	left := lessThan(nums2, nums1[mid])
+	idx := from + mid + left
+	if idx == ctx.Idx1 {
+		ctx.Num1 = nums1[mid]
+		ctx.HasNum1 = true
+	}
+	if idx == ctx.Idx2 {
+		ctx.Num2 = nums1[mid]
+		ctx.HasNum2 = true
+	}
+	if ctx.HasNum1 && ctx.HasNum2 {
+		return
+	}
+	if mid > 0 || left > 0 {
+		do := (!ctx.HasNum1 && from <= ctx.Idx1 && from+mid+left > ctx.Idx1) || (!ctx.HasNum2 && from <= ctx.Idx2 && from+mid+left > ctx.Idx2)
+		if do {
+			combine(nums1[0:mid], nums2[0:left], from, ctx)
+			if ctx.HasNum1 && ctx.HasNum2 {
+				return
 			}
 		}
 	}
-	var median float64 
-
-	nlen := len(nums)
-	if nlen % 2 == 1 {
-		k := int((nlen-1) / 2)
-		median = float64(nums[k])
-	} else {
-		k := nlen / 2 - 1
-		median = float64(nums[k] + nums[k+1]) / 2
+	do := (!ctx.HasNum1 && from+mid+1+left <= ctx.Idx1) || (!ctx.HasNum2 && from+mid+1+left <= ctx.Idx2)
+	if do {
+		combine(nums1[mid+1:], nums2[left:], from+mid+1+left, ctx)
 	}
-	return median
+
+	return
+}
+func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+	total := len(nums1) + len(nums2)
+	idx := (total - 1) / 2
+	ctx := context{
+		Idx1:    idx,
+		Idx2:    idx,
+		Num1:    0,
+		Num2:    0,
+		HasNum1: false,
+		HasNum2: false,
+	}
+	if total%2 == 0 {
+		ctx.Idx2 = idx + 1
+	}
+	combine(nums1, nums2, 0, &ctx)
+	return float64(ctx.Num1+ctx.Num2) / 2
 }
 
-func TestFindMedianSortedArrays (t *testing.T) {
-	n1 := []int{1,3}
-	n2 := []int{2,4,4}
+func TestFindMedianSortedArrays(t *testing.T) {
+	n1 := []int{1, 3}
+	n2 := []int{2, 4, 4}
 
-	m := findMedianSortedArrays(n1,n2)
+	m := findMedianSortedArrays(n1, n2)
 	t.Log(m)
 }
