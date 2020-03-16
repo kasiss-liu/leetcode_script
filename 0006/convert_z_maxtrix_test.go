@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func getZposition(i, numRows, capNum int) (pos [2]int) {
+func getMatrixposition(i, numRows, capNum int) (pos [2]int) {
 
 	if numRows <= 1 {
 		pos[0] = i
@@ -38,7 +38,7 @@ func getZposition(i, numRows, capNum int) (pos [2]int) {
 	return
 }
 
-func convert(s string, numRows int) string {
+func convertByMatrix(s string, numRows int) string {
 
 	bs := []byte(s)
 	l := len(bs)
@@ -58,7 +58,7 @@ func convert(s string, numRows int) string {
 	}
 
 	for i := 0; i < l; i++ {
-		pos := getZposition(i, numRows, capNum)
+		pos := getMatrixposition(i, numRows, capNum)
 		matrix[pos[1]][pos[0]] = bs[i]
 	}
 	buf := make([]byte, 0, l)
@@ -72,11 +72,11 @@ func convert(s string, numRows int) string {
 	return string(buf)
 }
 
-func TestConvertZ(t *testing.T) {
+func TestConvertByMatrix(t *testing.T) {
 
 	exp := "acebdf"
 	s := "abcdef"
-	ss := convert(s, 1)
+	ss := convertByMatrix(s, 1)
 	t.Log(ss)
 	if exp != ss {
 		t.Error(exp, " not Equal ", ss)
