@@ -1,16 +1,15 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func countCharacters(words []string, chars string) int {
 	bchars := []byte(chars)
-	bmap := make(map[byte]int, len(bchars))
+	bmap := make([]int, 256)
 	for _, char := range bchars {
-		if _, ok := bmap[char]; ok {
-			bmap[char]++
-		} else {
-			bmap[char] = 1
-		}
+		i := int(char)
+		bmap[i]++
 	}
 	wordLen := 0
 	for _, word := range words {
@@ -18,23 +17,18 @@ func countCharacters(words []string, chars string) int {
 		if len(bword) > len(chars) {
 			continue
 		}
-		wordMap := make(map[byte]int, len(bword))
+
+		cpBmap := make([]int, 256)
+		copy(cpBmap, bmap)
 		needSum := true
 		for _, b := range bword {
-			if _, ok := bmap[b]; !ok {
+			i := int(b)
+			cpBmap[i]--
+			if cpBmap[i] < 0 {
 				needSum = false
 				break
-			} else {
-				if _, ok := wordMap[b]; ok {
-					wordMap[b]++
-				} else {
-					wordMap[b] = 1
-				}
-				if wordMap[b] > bmap[b] {
-					needSum = false
-					break
-				}
 			}
+
 		}
 
 		if needSum {
