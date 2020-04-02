@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 type ListNode struct {
 	Val  int
@@ -11,6 +13,17 @@ func reverseList(head *ListNode) *ListNode {
 	var reverse *ListNode
 	for head != nil {
 		head, reverse, head.Next = head.Next, head, reverse
+	}
+	return reverse
+}
+
+func reverseListNormal(head *ListNode) *ListNode {
+	var reverse *ListNode
+	for head != nil {
+		tmpHead := head
+		head = head.Next
+		tmpHead.Next = reverse
+		reverse = tmpHead
 	}
 	return reverse
 }
@@ -30,7 +43,7 @@ func TestReverseList(t *testing.T) {
 	}
 
 	res := reverseList(head)
-	chainRes := reverseList(res)
+	chainRes := reverseListNormal(res)
 
 	b := make([]int, 0, len(a))
 	for chainRes != nil {
