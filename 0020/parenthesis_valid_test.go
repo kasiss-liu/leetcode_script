@@ -7,11 +7,11 @@ func isValid(s string) bool {
 	stack := make([]byte, 0, len(bs)/2+1)
 	for _, b := range bs {
 		//压栈 ( [ {
-		if b == 40 || b == 91 || b == 123 {
+		if b == '(' || b == '[' || b == '{' {
 			stack = append(stack, b)
 		}
 		//出栈 ) ] }
-		if b == 41 || b == 93 || b == 125 {
+		if b == ')' || b == ']' || b == '}' {
 			if len(stack) > 0 {
 				c := stack[len(stack)-1]
 				if checkEqual(b, c) {
@@ -33,22 +33,18 @@ func isValid(s string) bool {
 func checkEqual(b, c byte) (res bool) {
 	res = true
 	switch b {
-	//)
-	case 41:
-		if c != 40 {
+	case ')':
+		if c != '(' {
 			res = false
 		}
-	//]
-	case 93:
-		if c != 91 {
+	case ']':
+		if c != '[' {
 			res = false
 		}
-	//}
-	case 125:
-		if c != 123 {
+	case '}':
+		if c != '{' {
 			res = false
 		}
-	//unexpected char
 	default:
 		res = false
 	}

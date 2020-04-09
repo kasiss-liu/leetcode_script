@@ -16,15 +16,15 @@ func myAtoi(s string) int {
 			continue
 		}
 		//第一个有效字符是符号
-		if first && (b == 45 || b == 43) {
-			if b == 45 {
+		if first && (b == '-' || b == '+') {
+			if b == '-' {
 				symbol = -1
 			}
 			first = false
 			continue
 		}
 		//有效int
-		if b >= 48 && b <= 57 {
+		if b >= '0' && b <= '9' {
 			if first {
 				first = false
 			}
