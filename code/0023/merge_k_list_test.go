@@ -23,6 +23,10 @@ func mergeKLists(lists []*ListNode) *ListNode {
 	l1 := mergeKLists(lists[:mid])
 	l2 := mergeKLists(lists[mid:])
 
+	return mergeTwoLists(l1, l2)
+}
+
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	head := &ListNode{}
 	tail := head
 
@@ -42,17 +46,11 @@ func mergeKLists(lists []*ListNode) *ListNode {
 		}
 	}
 
-	for l1 != nil {
-		tmp := &ListNode{Val: l1.Val}
-		tail.Next = tmp
-		tail = tail.Next
-		l1 = l1.Next
+	if l1 != nil {
+		tail.Next = l1
 	}
-	for l2 != nil {
-		tmp := &ListNode{Val: l2.Val}
-		tail.Next = tmp
-		tail = tail.Next
-		l2 = l2.Next
+	if l2 != nil {
+		tail.Next = l2
 	}
 
 	return head.Next
