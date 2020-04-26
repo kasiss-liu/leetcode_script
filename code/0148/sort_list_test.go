@@ -2,12 +2,9 @@ package main
 
 import (
 	"testing"
-)
 
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
+	. "leetcode.kasiss.cn/code/utils"
+)
 
 func sortList(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
@@ -21,7 +18,6 @@ func sortList(head *ListNode) *ListNode {
 	}
 	right := slow.Next
 	slow.Next = nil
-
 	return mergeTwoLists(sortList(head), sortList(right))
 }
 
@@ -54,23 +50,8 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 
 	return head.Next
 }
-
-func createList(a []int) *ListNode {
-	head := &ListNode{}
-	chain := head
-	for k, i := range a {
-		if k == 0 {
-			chain.Val = i
-			continue
-		}
-		t := &ListNode{Val: i}
-		chain.Next = t
-		chain = t
-	}
-	return head
-}
 func TestMerge(t *testing.T) {
-	a := createList([]int{6, 5, 3, 2, 10, 3, 2, 5})
+	a := CreateList([]int{6, 5, 3, 2, 10, 3, 2, 5})
 	res := sortList(a)
 	t.Error("testing", res)
 }
