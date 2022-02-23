@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	. "leetcode.kasiss.cn/code/utils"
+	. "github.com/kasiss-liu/leetcode_script/code/utils"
 )
 
 func sortList(head *ListNode) *ListNode {

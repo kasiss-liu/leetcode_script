@@ -21,3 +21,24 @@ func CreateList(a []int) *ListNode {
 	}
 	return head
 }
+
+//CreateCircleList
+func CreateCircleList(a []int, pos int) *ListNode {
+	head := &ListNode{}
+	chain := head
+	var cirleStartNode *ListNode
+	last := len(a) - 1
+	for k, i := range a {
+		t := &ListNode{Val: i}
+		if k == pos {
+			cirleStartNode = t
+		}
+		if k == last {
+			t.Next = cirleStartNode
+		}
+		chain.Next = t
+		chain = t
+	}
+
+	return head.Next
+}
